@@ -66,7 +66,7 @@ config.set('fonts.tabs.unselected', '8pt JetBrains Mono')
 c.downloads.position = 'bottom'
 
 c.editor.command = ['code', '{file}']
-default_page = 'file:///home/pncolvr/Projects/scripts/utils/browser/landing-page/home/index.html'
+default_page = 'file:///home/pncolvr/Projects/helpers/browser/landingpage/home/index.html'
 c.url.default_page = default_page
 c.url.start_pages = [default_page]
 
