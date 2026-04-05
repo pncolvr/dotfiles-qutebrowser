@@ -10,8 +10,6 @@
 // ==/UserScript==
 
 if (document.cookie.indexOf("wide=1") === -1) {
-    if (document.cookie.indexOf("wide=1") === -1) {
-        document.cookie="wide=1;domain=.youtube.com"
-    }
+    document.cookie="wide=1;domain=.youtube.com"
     location.reload();
 }
