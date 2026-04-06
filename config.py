@@ -164,8 +164,8 @@ config.bind('do', 'download-open')
 config.bind('<F12>', 'devtools')
 config.bind('<Ctrl-F>', 'cmd-set-text /')
 
-config.bind(',mo', f'jseval -f {conf_folder}/sripts/js/mono.js')
-config.bind(',ui', f'jseval -f {conf_folder}/sripts/js/unlockinsta.js')
+config.bind(',mo', f'jseval -f {conf_folder}/scripts/js/mono.js')
+config.bind(',ui', f'jseval -f {conf_folder}/scripts/js/unlockinsta.js')
 # config.bind('<Ctrl-Alt-Shift-Meta-F3>', f'jseval -f {conf_folder}/scripts/js/embedyt.js')
 config.bind(',gh', f'jseval -f {conf_folder}/scripts/js/home.js')
 
@@ -198,6 +198,6 @@ config.bind(',mm', 'spawn --userscript ~/.config/hypr/scripts/tolocalplayer.sh "
 config.bind(',MM', f'spawn --userscript /usr/bin/kitty --hold -e {conf_folder}/scripts/download.sh {{url}}')
 config.bind(',mM', 'hint links spawn --userscript ~/.config/hypr/scripts/tolocalplayer.sh "{title}" "{hint-url}"')
 
-config.bind(',gr', f'spawn --userscript {conf_folder}/scripts/custom/css-apply.sh ;; greasemonkey-reload ;; reload')
+config.bind(',gr', f'spawn --userscript {conf_folder}/scripts/custom/apply.sh ;; greasemonkey-reload ;; reload')
 
 config.bind('D', f'spawn --userscript {conf_folder}/scripts/python/darkreader.py toggle domain')

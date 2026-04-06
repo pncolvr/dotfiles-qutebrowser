@@ -32,6 +32,22 @@
         "clear": false
       },
       "problemMatcher": []
+    },
+    {
+      "label": "Update custom css+js",
+      "type": "shell",
+      "command": "${workspaceFolder}/scripts/custom/apply.sh",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared",
+        "focus": true,
+        "showReuseMessage": false,
+        "clear": false
+      },
+      "problemMatcher": []
     }
   ]
 }
