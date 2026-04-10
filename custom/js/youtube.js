@@ -2,7 +2,7 @@
 // @name         YouTube auto cinema mode
 // @namespace    http://youtube.com/
 // @version      0.1
-// @description  YouTube auto cinema mode
+// @description  YouTube auto cinema mode and auto mute ads
 // @author       pncolvr
 // @match        https://*.youtube.com/*
 // @grant        none
@@ -89,3 +89,69 @@ addEventListener("pause", () => {
 }, {
   capture: true
 });
+
+
+const adSelectors = [
+    '.ytp-ad-player-overlay',
+    '.ytp-ad-module',
+    '.ytp-ad-text',
+    '.video-ads',
+    '.ytp-ad-image-overlay',
+    '.ad-interrupting'
+];
+
+let wasMutedByScript = false;
+let userOverrode = false;
+
+const video = document.querySelector('video');
+
+const attachUserListener = () => {
+    const v = document.querySelector('video');
+    if (!v) return;
+
+    v.addEventListener('volumechange', () => {
+        if (wasMutedByScript && !userOverrode && isAdPresent()) {
+            console.log("User manually unmuted during ad: respecting");
+            userOverrode = true;
+        }
+    });
+};
+
+const isAdPresent = () => {
+    return adSelectors.some(selector => {
+        const el = document.querySelector(selector);
+        return el && el.offsetHeight > 0;
+    });
+};
+
+const toggleMute = (shouldMute) => {
+    const video = document.querySelector('video');
+    if (!video) return;
+
+    if (shouldMute) {
+        if (!video.muted && !userOverrode) {
+            console.log("Ad detected: muting");
+            // video.muted = true;
+            const btn = document.querySelector('.ytp-mute-button');
+            if (btn && !video.muted) btn.click();
+            wasMutedByScript = true;
+        }
+    } else {
+        userOverrode = false;
+
+        if (wasMutedByScript) {
+            console.log("Ad ended: unmuting");
+            // video.muted = false;
+            const btn = document.querySelector('.ytp-mute-button');
+            if (btn && video.muted) btn.click();
+            wasMutedByScript = false;
+        }
+    }
+};
+
+const observer = new MutationObserver(() => {
+    toggleMute(isAdPresent());
+    attachUserListener();
+});
+
+observer.observe(document.body, { childList: true, subtree: true });
