@@ -91,8 +91,8 @@ c.input.insert_mode.auto_leave = True
 c.input.insert_mode.auto_load = True
 
 # dark mode setup
-c.colors.webpage.darkmode.enabled = False
-c.colors.webpage.darkmode.algorithm = 'lightness-cielab'
+# c.colors.webpage.darkmode.enabled = False
+# c.colors.webpage.darkmode.algorithm = 'lightness-cielab'
 c.colors.webpage.darkmode.policy.images = 'never'
 # config.set('colors.webpage.darkmode.enabled', False, 'file://*')
 c.colors.webpage.preferred_color_scheme = "dark"
@@ -108,7 +108,7 @@ config.set("content.local_storage", True)
 # config.set("content.javascript.can_access_clipboard", True)
 
 # c.content.headers.user_agent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
-c.zoom.default = 90
+# c.zoom.default = 90
 c.zoom.levels = [
     "25%", "30%", "35%", "40%", "45%", "50%", "55%", "60%", "65%", "70%",
     "75%", "80%", "85%", "90%", "95%", "100%", "105%", "110%", "115%",
