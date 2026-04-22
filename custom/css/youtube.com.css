@@ -1,0 +1,6 @@
+ytd-rich-shelf-renderer[is-shorts],
+/* ytd-reel-shelf-renderer, */
+a[aria-label="Shorts"],
+a[title="Shorts"] {
+  display: none !important;
+}
