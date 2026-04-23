@@ -131,6 +131,7 @@ c.url.searchengines = {
         # '!g': 'https://www.google.com/search?q={}',
         '!da': 'https://duckduckgo.com/?q={}',
         '!pc': 'https://www.pcdiga.com/search?query={}',
+        '!pdb': 'https://www.protondb.com/search?q={}',
         '!a': 'https://archlinux.org/packages/?sort=&q={}&maintainer=&flagged=',
         '!aur': 'https://aur.archlinux.org/packages?O=0&SeB=nd&K={}&outdated=&SB=p&SO=d&PP=50&submit=Go',
         '!w': 'https://wiki.archlinux.org/index.php?search={}',
