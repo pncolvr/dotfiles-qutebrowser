@@ -33,6 +33,7 @@ def setup(c, flavour, samecolorrows = False):
             "base": "#eff1f5",
             "mantle": "#e6e9ef",
             "crust": "#dce0e8",
+            "selected": "#6171a2"
         }
     elif flavour == "frappe":
         palette = {
@@ -62,6 +63,7 @@ def setup(c, flavour, samecolorrows = False):
             "base": "#303446",
             "mantle": "#292c3c",
             "crust": "#232634",
+            "selected": "#6171a2"
         }
     elif flavour == "macchiato":
         palette = {
@@ -91,6 +93,7 @@ def setup(c, flavour, samecolorrows = False):
             "base": "#24273a",
             "mantle": "#1e2030",
             "crust": "#181926",
+            "selected": "#6171a2"
         }
     else:
         palette = {
@@ -120,6 +123,7 @@ def setup(c, flavour, samecolorrows = False):
             "base": "#1e1e2e",
             "mantle": "#181825",
             "crust": "#11111b",
+            "selected": "#6171a2"
         }
     # }}}
 
@@ -143,11 +147,11 @@ def setup(c, flavour, samecolorrows = False):
     c.colors.completion.fg = palette["subtext0"]
 
     ## Background color of the selected completion item.
-    c.colors.completion.item.selected.bg = palette["surface2"]
+    c.colors.completion.item.selected.bg = palette["selected"]
     ## Bottom border color of the selected completion item.
-    c.colors.completion.item.selected.border.bottom = palette["surface2"]
+    c.colors.completion.item.selected.border.bottom = palette["selected"]
     ## Top border color of the completion widget category headers.
-    c.colors.completion.item.selected.border.top = palette["surface2"]
+    c.colors.completion.item.selected.border.top = palette["selected"]
     ## Foreground color of the selected completion item.
     c.colors.completion.item.selected.fg = palette["text"]
     ## Foreground color of the selected completion item.
@@ -234,7 +238,7 @@ def setup(c, flavour, samecolorrows = False):
     c.colors.prompts.fg = palette["text"]
 
     ## Background color for the selected item in filename prompts.
-    c.colors.prompts.selected.bg = palette["surface2"]
+    c.colors.prompts.selected.bg = palette["selected"]
 
     ## Background color for the selected item in filename prompts.
     c.colors.prompts.selected.fg = palette["rosewater"]
