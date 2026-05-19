@@ -10,29 +10,29 @@
 
 // 
 
-function waitForDialog() {
-  return new Promise((resolve) => {
-    const existing = document.querySelector('div[role="dialog"]');
-    if (existing) {
-      return resolve(existing);
-    }
+// function waitForDialog() {
+//   return new Promise((resolve) => {
+//     const existing = document.querySelector('div[role="dialog"]');
+//     if (existing) {
+//       return resolve(existing);
+//     }
 
-    const observer = new MutationObserver(() => {
-      const dialog = document.querySelector('div[role="dialog"]');
-      if (dialog) {
-        observer.disconnect();
-        resolve(dialog);
-      }
-    });
+//     const observer = new MutationObserver(() => {
+//       const dialog = document.querySelector('div[role="dialog"]');
+//       if (dialog) {
+//         observer.disconnect();
+//         resolve(dialog);
+//       }
+//     });
 
-    observer.observe(document.body, {
-      childList: true,
-      subtree: true,
-    });
-  });
-}
+//     observer.observe(document.body, {
+//       childList: true,
+//       subtree: true,
+//     });
+//   });
+// }
 
-waitForDialog().then(dialog => {
-  console.log('Dialog found: dismissing');
-  document.querySelector("[data-testid='dismiss-welcome']").click();
-});
+// waitForDialog().then(dialog => {
+//   console.log('Dialog found: dismissing');
+//   document.querySelector("[data-testid='dismiss-welcome']").click();
+// });

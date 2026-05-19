@@ -10,5 +10,9 @@ settings:
     global: 3000
   changelog_after_upgrade:
     global: patch
+  content.javascript.clipboard:
+    https://quickshell.org: access-paste
+  content.notifications.enabled:
+    https://calendar.google.com: false
   fonts.tabs.selected:
     global: 9pt JetBrains Mono
