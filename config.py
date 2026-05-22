@@ -153,6 +153,7 @@ c.completion.open_categories = ['searchengines', 'quickmarks', 'bookmarks', 'his
 # config.set('input.mode_override', 'passthrough', 'www.youtube.com')
 
 conf_folder="/home/pncolvr/.config/qutebrowser"
+scripts_folder=f'{conf_folder}/scripts'
 
 config.bind('o', 'cmd-set-text -s :open')
 config.bind('!', 'cmd-set-text -s :open !')
@@ -165,10 +166,10 @@ config.bind('do', 'download-open')
 config.bind('<F12>', 'devtools')
 config.bind('<Ctrl-F>', 'cmd-set-text /')
 
-config.bind(',mo', f'jseval -f {conf_folder}/scripts/js/mono.js')
-config.bind(',ui', f'jseval -f {conf_folder}/scripts/js/unlockinsta.js')
-# config.bind('<Ctrl-Alt-Shift-Meta-F3>', f'jseval -f {conf_folder}/scripts/js/embedyt.js')
-config.bind(',gh', f'jseval -f {conf_folder}/scripts/js/home.js')
+config.bind(',mo', f'jseval -f {scripts_folder}/js/mono.js')
+config.bind(',ui', f'jseval -f {scripts_folder}/js/unlockinsta.js')
+# config.bind('<Ctrl-Alt-Shift-Meta-F3>', f'jseval -f {scripts_folder}/js/embedyt.js')
+config.bind(',gh', f'jseval -f {scripts_folder}/js/home.js')
 
 config.bind(',co', 'tab-only')
 config.bind('<Ctrl+b>', 'config-cycle statusbar.show never always')
@@ -188,17 +189,17 @@ config.bind(',sS', ':print --pdf ~/Pictures/qutebrowser/{date}.pdf')
 
 # config.bind('<Ctrl-PgDown>', 'tab-next')
 # config.bind('<Ctrl-PgUp>', 'tab-prev')
-config.bind(',yy', f'spawn --userscript {conf_folder}/scripts/url/clean.sh {{url}}')
-config.bind(',yY', f'hint links spawn --userscript {conf_folder}/scripts/url/clean.sh {{hint-url}}')
-config.bind(',YY', f'spawn --userscript {conf_folder}/scripts/url/select.sh')
-config.bind(',cc', f'spawn --userscript /usr/bin/kitty --hold -e {conf_folder}/scripts/certificate.sh {{url}}')
+config.bind(',yy', f'spawn --userscript {scripts_folder}/url/clean.sh {{url}}')
+config.bind(',yY', f'hint links spawn --userscript {scripts_folder}/url/clean.sh {{hint-url}}')
+config.bind(',YY', f'spawn --userscript {scripts_folder}/url/select.sh')
+config.bind(',cc', f'spawn /usr/bin/ghostty -e {scripts_folder}/hold.sh {scripts_folder}/certificate.sh {{url}}')
 
 config.bind(',gH', f'open {default_page}')
 
 config.bind(',mm', 'spawn --userscript ~/.config/hypr/scripts/tolocalplayer.sh "{title}" "{url}"')
-config.bind(',MM', f'spawn --userscript /usr/bin/kitty --hold -e {conf_folder}/scripts/download.sh {{url}}')
+config.bind(',MM', f'spawn /usr/bin/ghostty -e {scripts_folder}/hold.sh {scripts_folder}/download.sh {{url}}')
 config.bind(',mM', 'hint links spawn --userscript ~/.config/hypr/scripts/tolocalplayer.sh "{title}" "{hint-url}"')
 
-config.bind(',gr', f'spawn --userscript {conf_folder}/scripts/custom/apply.sh ;; greasemonkey-reload ;; reload')
+config.bind(',gr', f'spawn --userscript {scripts_folder}/custom/apply.sh ;; greasemonkey-reload ;; reload')
 
-config.bind('D', f'spawn --userscript {conf_folder}/scripts/python/darkreader.py toggle domain')
+config.bind('D', f'spawn --userscript {scripts_folder}/python/darkreader.py toggle domain')
