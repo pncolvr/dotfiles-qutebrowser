@@ -14,5 +14,11 @@ settings:
     https://quickshell.org: access-paste
   content.notifications.enabled:
     https://calendar.google.com: false
+  downloads.location.directory:
+    global: /home/pncolvr/Downloads/mods_download
+  downloads.location.prompt:
+    global: false
   fonts.tabs.selected:
     global: 9pt JetBrains Mono
+  statusbar.show:
+    global: always

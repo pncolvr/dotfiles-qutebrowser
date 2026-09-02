@@ -2,6 +2,8 @@ import os
 from urllib.request import urlopen
 from qutebrowser.mainwindow import tabwidget
 
+home = os.path.expanduser('~')
+
 config.load_autoconfig(True)
 
 if not os.path.exists(config.configdir / "theme.py"):
@@ -65,8 +67,22 @@ config.set('fonts.tabs.unselected', '8pt JetBrains Mono')
 
 c.downloads.position = 'bottom'
 
+c.downloads.remove_finished = 500
+
+# Prompt for the download location by default, defaulting to ~/Downloads.
+# Press `dp` to toggle prompting off; that also switches the directory to the
+# mods folder so downloads auto-save there. qutebrowser download settings are
+# global (no per-site patterns), so this applies to every site.
+c.downloads.location.prompt = True
+c.downloads.location.directory = f'{home}/Downloads'
+
+# Let the Nexus auto-download userscript close its own tab (window.close())
+# once a download starts. Scoped to nexusmods.com so other sites can't close
+# tabs. On the last tab this is a no-op (see tabs.last_close = 'ignore').
+config.set('content.javascript.can_close_tabs', True, 'https://*.nexusmods.com/*')
+
 c.editor.command = ['code', '{file}']
-default_page = 'file:///home/pncolvr/Projects/helpers/browser/landingpage/home/index.html'
+default_page = f'file://{home}/Projects/helpers/browser/landingpage/home/index.html'
 c.url.default_page = default_page
 c.url.start_pages = [default_page]
 
@@ -85,6 +101,10 @@ c.tabs.title.alignment = 'center'
 c.tabs.title.format = '{index}:{audio} {current_title}'
 
 c.tabs.indicator.width = 0
+
+# When the last tab is closed (e.g. by the Nexus auto-close userscript), load
+# the home/landing page instead of leaving an empty tab.
+c.tabs.last_close = 'default-page'
 
 
 c.input.insert_mode.auto_leave = True
@@ -152,8 +172,7 @@ c.completion.open_categories = ['searchengines', 'quickmarks', 'bookmarks', 'his
 
 # config.set('input.mode_override', 'passthrough', 'www.youtube.com')
 
-conf_folder="/home/pncolvr/.config/qutebrowser"
-scripts_folder=f'{conf_folder}/scripts'
+scripts_folder=str(config.configdir / 'scripts')
 
 config.bind('o', 'cmd-set-text -s :open')
 config.bind('!', 'cmd-set-text -s :open !')
@@ -163,6 +182,13 @@ config.unbind('d')
 # config.bind('dm', 'config-cycle colors.webpage.darkmode.enabled')
 config.bind('dc', 'download-clear')
 config.bind('do', 'download-open')
+# Toggle prompting AND the target folder together:
+#   prompt on  -> ~/Downloads          (you get the save dialog)
+#   prompt off -> ~/Downloads/mods_download (auto-save, no dialog)
+# Both cycles stay in sync as long as they start aligned (see defaults above).
+config.bind('dp', 'config-cycle downloads.location.prompt ;; '
+                  'config-cycle downloads.location.directory '
+                  f'{home}/Downloads {home}/Downloads/mods_download')
 config.bind('<F12>', 'devtools')
 config.bind('<Ctrl-F>', 'cmd-set-text /')
 

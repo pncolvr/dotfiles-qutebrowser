@@ -11,11 +11,11 @@ nav.top-nav:has(a.tw-link:hover) ~ div div.side-nav {
   width: 232px
 }
 
-#root div.stream-chat > div.stream-chat-header,
+/* #root div.stream-chat > div.stream-chat-header,
 #root div.chat-room__content > div.tw-transition,
 .community-points-summary {
     display: none!important;
-}
+} */
 
 /* #root div.ekYTef {
     display:inline-flex!important;
