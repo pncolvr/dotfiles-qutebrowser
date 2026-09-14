@@ -29,7 +29,7 @@ c.content.blocking.adblock.lists = [
     "https://secure.fanboy.co.nz/fanboy-cookiemonster.txt",
 ]
 c.content.mouse_lock = "ask"
-c.content.pdfjs = True
+c.content.pdfjs = False
 c.statusbar.show = "always"
 
 tabwidget.TabWidget.MUTE_STRING = ""
@@ -157,7 +157,9 @@ c.url.searchengines = {
         '!w': 'https://wiki.archlinux.org/index.php?search={}',
         '!yt': 'https://www.youtube.com/results?search_query={}',
         '!am': 'https://www.amazon.es/s?k={}',
-        '!sg': 'https://www.steamgriddb.com/search/grids?term={}'
+        '!sg': 'https://www.steamgriddb.com/search/grids?term={}',
+        '!mw': 'https://www.merriam-webster.com/dictionary/{}',
+        '!dlpo': 'https://dicionario.priberam.org/pt-pt/{}'
         }
 
 # config.bind(',sg', 'open -t !g {primary}')
