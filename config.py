@@ -76,11 +76,6 @@ c.downloads.remove_finished = 500
 c.downloads.location.prompt = True
 c.downloads.location.directory = f'{home}/Downloads'
 
-# Let the Nexus auto-download userscript close its own tab (window.close())
-# once a download starts. Scoped to nexusmods.com so other sites can't close
-# tabs. On the last tab this is a no-op (see tabs.last_close = 'ignore').
-config.set('content.javascript.can_close_tabs', True, 'https://*.nexusmods.com/*')
-
 c.editor.command = ['code', '{file}']
 default_page = f'file://{home}/Projects/helpers/browser/landingpage/home/index.html'
 c.url.default_page = default_page
@@ -203,6 +198,7 @@ config.bind(',co', 'tab-only')
 config.bind('<Ctrl+b>', 'config-cycle statusbar.show never always')
 
 config.bind(',cs', ':config-source')
+config.bind(',w', 'session-save')
 config.bind('<Ctrl-l>', 'cmd-set-text :open {url:pretty}')
 config.bind('<Ctrl-t>', 'cmd-set-text -s :open -t ')
 
