@@ -36,7 +36,7 @@ tabwidget.TabWidget.MUTE_STRING = ""
 tabwidget.TabWidget.AUDIBLE_STRING = ""
 
 text_color = '#ffffff'
-active_background = '#6272a4'
+active_background = '#6B8FB3'
 # active tabs
 c.colors.tabs.selected.even.bg = active_background
 c.colors.tabs.selected.odd.bg  = active_background
