@@ -220,9 +220,9 @@ config.bind(',cc', f'spawn /usr/bin/ghostty -e {scripts_folder}/hold.sh {scripts
 
 config.bind(',gH', f'open {default_page}')
 
-config.bind(',mm', 'spawn --userscript ~/.config/hypr/scripts/tolocalplayer.sh "{title}" "{url}"')
+config.bind(',mm', 'spawn --userscript ~/.config/quickshell/src/services/launcher/launcher.sh provider media "{title}" "{url}"')
 config.bind(',MM', f'spawn /usr/bin/ghostty -e {scripts_folder}/hold.sh {scripts_folder}/download.sh {{url}}')
-config.bind(',mM', 'hint links spawn --userscript ~/.config/hypr/scripts/tolocalplayer.sh "{title}" "{hint-url}"')
+config.bind(',mM', 'hint links spawn --userscript ~/.config/quickshell/src/services/launcher/launcher.sh provider media "{title}" "{hint-url}"')
 
 config.bind(',gr', f'spawn --userscript {scripts_folder}/custom/apply.sh ;; greasemonkey-reload ;; reload')
 
