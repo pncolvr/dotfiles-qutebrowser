@@ -26,7 +26,13 @@ if [[ ${#titles[@]} -eq 1 ]]; then
    selected_titles=("${titles[0]}")
 else
     picker="${XDG_CONFIG_HOME:-$HOME/.config}/quickshell/src/services/launcher/launcher.sh"
-    selection=$(printf '%s\n' "${titles[@]}" | "$picker" --dmenu -multi-select -no-custom -sort -p "Tabs") || exit "$?"
+    if selection=$(printf '%s\n' "${titles[@]}" | "$picker" --dmenu -multi-select -no-custom -sort -p "Tabs"); then
+        :
+    else
+        picker_status=$?
+        [[ "$picker_status" -eq 1 ]] && exit 0
+        exit "$picker_status"
+    fi
     [[ -n "$selection" ]] || exit 0
     mapfile -t selected_titles <<< "$selection"
 fi

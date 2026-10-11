@@ -179,7 +179,7 @@ c.completion.open_categories = ['searchengines', 'quickmarks', 'bookmarks', 'his
 
 # config.set('input.mode_override', 'passthrough', 'www.youtube.com')
 
-scripts_folder=str(config.configdir / 'scripts')
+scripts_folder = f'{home}/.config/qutebrowser/scripts'
 
 config.bind('o', 'cmd-set-text -s :open')
 config.bind('!', 'cmd-set-text -s :open !')
