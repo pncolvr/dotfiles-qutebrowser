@@ -12,6 +12,8 @@ c.content.user_stylesheets = [f'{home}/.config/qutebrowser/custom/css/scrollbars
 
 c.auto_save.interval = 3000
 
+c.messages.timeout = 10000
+
 c.changelog_after_upgrade = "patch"
 c.content.blocking.adblock.lists = [
     "https://easylist.to/easylist/easylist.txt",

@@ -74,6 +74,60 @@ c.colors.contextmenu.disabled.bg = SURFACE
 c.colors.contextmenu.disabled.fg = MUTED
 c.colors.contextmenu.selected.bg = ACCENT
 c.colors.contextmenu.selected.fg = BACKGROUND
+c.fonts.contextmenu = '10pt Noto Sans Mono'
+c.fonts.prompts = '10pt Noto Sans Mono'
+
+# Give menu text its own padding rather than relying on the desktop Qt style.
+from qutebrowser.mainwindow import mainwindow, prompt
+from qutebrowser.qt import sip
+
+if not hasattr(mainwindow.MainWindow, '_original_popup_stylesheet'):
+    mainwindow.MainWindow._original_popup_stylesheet = mainwindow.MainWindow.STYLESHEET
+mainwindow.MainWindow.STYLESHEET = mainwindow.MainWindow._original_popup_stylesheet + """
+    QMenu { padding: 4px; }
+    QMenu::item { padding: 6px 24px; }
+"""
+
+if not hasattr(prompt.PromptContainer, '_original_popup_stylesheet'):
+    prompt.PromptContainer._original_popup_stylesheet = prompt.PromptContainer.STYLESHEET
+prompt.PromptContainer.STYLESHEET = prompt.PromptContainer._original_popup_stylesheet + """
+    QWidget#PromptContainer { border: {{ conf.colors.prompts.border }}; }
+    QWidget#PromptContainer[overwritePrompt="true"] {
+        border: 2px solid {{ conf.colors.messages.warning.fg }};
+    }
+    QLabel#OverwritePromptTitle { color: {{ conf.colors.messages.warning.fg }}; }
+"""
+
+if not hasattr(prompt.PromptContainer, '_original_show_prompts'):
+    prompt.PromptContainer._original_show_prompts = prompt.PromptContainer._on_show_prompts
+
+
+def _show_clean_prompt(self, question, original=prompt.PromptContainer._original_show_prompts):
+    previous = self._prompt
+    original(self, question)
+    # Work around qutebrowser #8993: the previous save prompt can leave remnants.
+    if previous is not None and previous is not self._prompt and not sip.isdeleted(previous):
+        previous.hide()
+        previous.setParent(None)
+
+    overwrite = question is not None and question.title in (
+        'Overwrite existing file?', 'Overwrite special file?',
+    )
+    self.setProperty('overwritePrompt', overwrite)
+    if overwrite:
+        title_label = self._prompt._vbox.itemAt(0).widget()
+        title_label.setObjectName('OverwritePromptTitle')
+        title_label.style().unpolish(title_label)
+        title_label.style().polish(title_label)
+    self.style().unpolish(self)
+    self.style().polish(self)
+    self.update_geometry.emit()
+    self.update()
+    if self.parentWidget() is not None:
+        self.parentWidget().update()
+
+
+prompt.PromptContainer._on_show_prompts = _show_clean_prompt
 
 # Status text uses the desktop foreground; modes retain semantic accents.
 c.colors.statusbar.normal.bg = BACKGROUND
