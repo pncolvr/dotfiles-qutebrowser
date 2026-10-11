@@ -83,7 +83,7 @@ def apply(c, paths):
     c.colors.prompts.fg = TEXT
     c.colors.prompts.border = '1px solid ' + BORDER
     c.colors.prompts.selected.bg = ACCENT
-    c.colors.prompts.selected.fg = BACKGROUND
+    c.colors.prompts.selected.fg = TEXT
     c.colors.tooltip.bg = BACKGROUND
     c.colors.tooltip.fg = TEXT
     c.colors.contextmenu.menu.bg = SURFACE
@@ -91,7 +91,7 @@ def apply(c, paths):
     c.colors.contextmenu.disabled.bg = SURFACE
     c.colors.contextmenu.disabled.fg = MUTED
     c.colors.contextmenu.selected.bg = ACCENT
-    c.colors.contextmenu.selected.fg = BACKGROUND
+    c.colors.contextmenu.selected.fg = TEXT
     c.fonts.contextmenu = '10pt Noto Sans Mono'
     c.fonts.prompts = '10pt Noto Sans Mono'
 

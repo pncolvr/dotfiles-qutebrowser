@@ -57,6 +57,10 @@ def _install_popup_fixes():
         prompt.PromptContainer._original_popup_stylesheet = prompt.PromptContainer.STYLESHEET
     prompt.PromptContainer.STYLESHEET = prompt.PromptContainer._original_popup_stylesheet + """
         QWidget#PromptContainer { border: {{ conf.colors.prompts.border }}; }
+        QLineEdit {
+            selection-background-color: {{ conf.colors.prompts.selected.bg }};
+            selection-color: {{ conf.colors.prompts.selected.fg }};
+        }
         QWidget#PromptContainer[overwritePrompt="true"] {
             border: 2px solid {{ conf.colors.messages.warning.fg }};
         }
