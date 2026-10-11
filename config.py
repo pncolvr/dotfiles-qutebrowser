@@ -32,6 +32,8 @@ c.content.mouse_lock = "ask"
 c.content.pdfjs = False
 c.statusbar.show = "always"
 
+c.qt.chromium.low_end_device_mode = 'always'
+
 tabwidget.TabWidget.MUTE_STRING = ""
 tabwidget.TabWidget.AUDIBLE_STRING = ""
 
