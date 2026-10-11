@@ -4,7 +4,7 @@
     {
       "label": "Update custom css",
       "type": "shell",
-      "command": "${workspaceFolder}/scripts/custom/css-apply.sh",
+      "command": "${workspaceFolder}/src/scripts/custom/css-apply.sh",
       "options": {
         "cwd": "${workspaceFolder}"
       },
@@ -20,7 +20,7 @@
     {
       "label": "Update custom js",
       "type": "shell",
-      "command": "${workspaceFolder}/scripts/custom/js-apply.sh",
+      "command": "${workspaceFolder}/src/scripts/custom/js-apply.sh",
       "options": {
         "cwd": "${workspaceFolder}"
       },
@@ -36,7 +36,7 @@
     {
       "label": "Update custom css+js",
       "type": "shell",
-      "command": "${workspaceFolder}/scripts/custom/apply.sh",
+      "command": "${workspaceFolder}/src/scripts/custom/apply.sh",
       "options": {
         "cwd": "${workspaceFolder}"
       },

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-SRC_DIR="$HOME/.config/qutebrowser/custom/js"
+SRC_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/../../custom/js" && pwd)"
 for f in "$SRC_DIR"/*.js; do
   [ -f "$f" ] || continue
   name="$(basename "$f")"

@@ -1,4 +1,4 @@
-/* custom/js/scrollbars.js reveals only the area currently being scrolled. */
+/* src/custom/js/scrollbars.js reveals only the area currently being scrolled. */
 * {
     scrollbar-color: transparent transparent !important;
     scrollbar-width: thin !important;

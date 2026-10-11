@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-SRC_DIR="$HOME/.config/qutebrowser/custom/css"
+SRC_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/../../custom/css" && pwd)"
 rm -f "$HOME"/.config/qutebrowser/greasemonkey/_g.css.*.js
 for f in "$SRC_DIR"/*.css; do
   [ -f "$f" ] || continue

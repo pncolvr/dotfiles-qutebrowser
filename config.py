@@ -9,8 +9,8 @@ src = root / 'src'
 home = Path.home()
 paths = SimpleNamespace(
     home=str(home),
-    scripts=str(root / 'scripts'),
-    stylesheet=str(root / 'custom/css/scrollbars.css'),
+    scripts=str(src / 'scripts'),
+    stylesheet=str(src / 'custom/css/scrollbars.css'),
     downloads=str(home / 'Downloads'),
     default_page=(home / 'Projects/helpers/browser/landingpage/home/index.html').as_uri(),
 )
