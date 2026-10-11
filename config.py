@@ -156,6 +156,8 @@ scripts_folder=str(config.configdir / 'scripts')
 
 config.bind('o', 'cmd-set-text -s :open')
 config.bind('!', 'cmd-set-text -s :open !')
+config.bind('b', 'cmd-set-text -s :quickmark-load -t')
+config.bind('B', 'cmd-set-text -s :quickmark-load')
 
 # custom binds
 config.unbind('d')
