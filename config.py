@@ -30,6 +30,33 @@ c.qt.chromium.low_end_device_mode = 'always'
 tabwidget.TabWidget.MUTE_STRING = ""
 tabwidget.TabWidget.AUDIBLE_STRING = ""
 
+# Match Quickshell's title suffix cleanup before qutebrowser formats tabs.
+window_title_clean_patterns = (
+    '- Vivaldi', '- qutebrowser', '- FreeTube', '- YouTube',
+    '- Google Search', '- Twitch', '- Microsoft Azure',
+)
+
+# Keep the original method across :config-source reloads.
+if not hasattr(tabwidget.TabWidget, '_original_get_tab_fields'):
+    tabwidget.TabWidget._original_get_tab_fields = tabwidget.TabWidget.get_tab_fields
+
+
+def clean_tab_title_fields(
+    self, idx,
+    original=tabwidget.TabWidget._original_get_tab_fields,
+    patterns=window_title_clean_patterns,
+):
+    fields = original(self, idx)
+    title = fields['current_title']
+    for pattern in patterns:
+        title = title.removesuffix(f' {pattern}')
+    fields['current_title'] = title
+    fields['title_sep'] = ' - ' if title else ''
+    return fields
+
+
+tabwidget.TabWidget.get_tab_fields = clean_tab_title_fields
+
 c.tabs.padding = {'top': 0, 'bottom': 0, 'left': 0, 'right': 0}
 c.colors.webpage.bg = '#1e1e1e'
 # fonts
