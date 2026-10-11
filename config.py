@@ -12,7 +12,7 @@ c.content.user_stylesheets = [f'{home}/.config/qutebrowser/custom/css/scrollbars
 
 c.auto_save.interval = 3000
 
-c.messages.timeout = 10000
+c.messages.timeout = 5000
 
 c.changelog_after_upgrade = "patch"
 c.content.blocking.adblock.lists = [
@@ -26,6 +26,10 @@ c.content.blocking.adblock.lists = [
 c.content.mouse_lock = "ask"
 c.content.pdfjs = False
 c.statusbar.show = "always"
+config.bind('h', 'back')
+config.bind('l', 'forward')
+config.bind('H', 'scroll left')
+config.bind('L', 'scroll right')
 
 c.qt.chromium.low_end_device_mode = 'always'
 
