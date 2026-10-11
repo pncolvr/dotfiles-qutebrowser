@@ -8,7 +8,7 @@ config.load_autoconfig(True)
 config.source('theme.py')
 
 c.scrolling.bar = 'overlay'
-c.content.user_stylesheets = [str(config.configdir / 'custom' / 'css' / 'scrollbars.css')]
+c.content.user_stylesheets = [f'{home}/.config/qutebrowser/custom/css/scrollbars.css']
 
 c.auto_save.interval = 3000
 
