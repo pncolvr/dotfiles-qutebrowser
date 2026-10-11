@@ -122,3 +122,31 @@ c.colors.tabs.indicator.start = ACCENT
 c.colors.tabs.indicator.stop = OK
 c.colors.tabs.indicator.error = URGENT
 c.colors.tabs.indicator.system = 'none'
+
+from qutebrowser.misc import miscwidgets
+
+_fullscreen_base = getattr(
+    miscwidgets.FullscreenNotification,
+    '_qute_original_class',
+    miscwidgets.FullscreenNotification,
+)
+
+
+class _ThemedFullscreenNotification(_fullscreen_base):
+    _qute_original_class = _fullscreen_base
+    _theme_stylesheet = f"""
+        background-color: rgba(0, 0, 0, 128);
+        color: {ACCENT};
+        border: none;
+        border-radius: 16px;
+        padding: 14px;
+        font-family: "Noto Sans Mono";
+        font-size: 12px;
+        font-weight: bold;
+    """
+
+    def setStyleSheet(self, stylesheet):
+        super().setStyleSheet(self._theme_stylesheet)
+
+
+miscwidgets.FullscreenNotification = _ThemedFullscreenNotification
