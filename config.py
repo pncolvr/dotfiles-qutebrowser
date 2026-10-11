@@ -1,25 +1,18 @@
 import os
-from urllib.request import urlopen
 from qutebrowser.mainwindow import tabwidget
 
 home = os.path.expanduser('~')
 
 config.load_autoconfig(True)
 
-if not os.path.exists(config.configdir / "theme.py"):
-    theme = "https://raw.githubusercontent.com/catppuccin/qutebrowser/main/setup.py"
-    with urlopen(theme) as themehtml:
-        with open(config.configdir / "theme.py", "a") as file:
-            file.writelines(themehtml.read().decode("utf-8"))
+config.source('theme.py')
 
-if os.path.exists(config.configdir / "theme.py"):
-    import theme
-    theme.setup(c, 'macchiato', True)
+c.scrolling.bar = 'overlay'
+c.content.user_stylesheets = [str(config.configdir / 'custom' / 'css' / 'scrollbars.css')]
 
 c.auto_save.interval = 3000
 
 c.changelog_after_upgrade = "patch"
-c.colors.statusbar.normal.bg = "rgba(0, 0, 0, 0)"
 c.content.blocking.adblock.lists = [
     "https://easylist.to/easylist/easylist.txt",
     "https://easylist.to/easylist/easyprivacy.txt",
@@ -37,24 +30,10 @@ c.qt.chromium.low_end_device_mode = 'always'
 tabwidget.TabWidget.MUTE_STRING = ""
 tabwidget.TabWidget.AUDIBLE_STRING = ""
 
-text_color = '#ffffff'
-active_background = '#6B8FB3'
-# active tabs
-c.colors.tabs.selected.even.bg = active_background
-c.colors.tabs.selected.odd.bg  = active_background
-c.colors.tabs.selected.even.fg = text_color
-c.colors.tabs.selected.odd.fg  = text_color
-
-#inactive tabs
-c.colors.tabs.even.bg = '#000000'
-c.colors.tabs.odd.bg  = '#101010'
-c.colors.tabs.even.fg = text_color
-c.colors.tabs.odd.fg  = text_color
-
 c.tabs.padding = {'top': 0, 'bottom': 0, 'left': 0, 'right': 0}
 c.colors.webpage.bg = '#1e1e1e'
 # fonts
-c.fonts.default_family = []
+c.fonts.default_family = ['Noto Sans Mono']
 c.fonts.default_size = '10pt'
 c.fonts.web.family.fixed = 'JetBrains Mono'
 c.fonts.web.family.sans_serif = 'JetBrains Mono'
@@ -64,8 +43,10 @@ c.fonts.web.family.standard = 'JetBrains Mono'
 # c.fonts.tabs.selected = "9pt JetBrains Mono"
 # c.fonts.tabs.unselected = "9pt JetBrains Mono"
 
-config.set('fonts.tabs.selected', '8pt JetBrains Mono')
-config.set('fonts.tabs.unselected', '8pt JetBrains Mono')
+# config.set('fonts.tabs.selected', '8pt JetBrains Mono')
+config.set('fonts.tabs.selected', 'bold 8pt Noto Sans Mono')
+# config.set('fonts.tabs.unselected', '8pt JetBrains Mono')
+config.set('fonts.tabs.unselected', 'bold 8pt Noto Sans Mono')
 
 c.downloads.position = 'bottom'
 

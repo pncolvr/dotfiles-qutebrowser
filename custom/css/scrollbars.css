@@ -1,0 +1,9 @@
+/* custom/js/scrollbars.js reveals only the area currently being scrolled. */
+* {
+    scrollbar-color: transparent transparent !important;
+    scrollbar-width: thin !important;
+}
+
+[data-qute-scrolling] {
+    scrollbar-color: #6b8fb3 transparent !important;
+}

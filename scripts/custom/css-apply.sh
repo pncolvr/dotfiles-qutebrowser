@@ -4,6 +4,8 @@ SRC_DIR="$HOME/.config/qutebrowser/custom/css"
 rm -f "$HOME"/.config/qutebrowser/greasemonkey/_g.css.*.js
 for f in "$SRC_DIR"/*.css; do
   [ -f "$f" ] || continue
+  # The global scrollbar stylesheet is loaded directly by config.py.
+  [ "${f##*/}" = "scrollbars.css" ] && continue
   name="$(basename "${f%.css}")"
   out_name="_g.css.$name.js"
   out="$HOME/.config/qutebrowser/greasemonkey/$out_name"
