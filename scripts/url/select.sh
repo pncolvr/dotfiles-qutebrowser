@@ -4,7 +4,16 @@ WORKSPACE=$(dirname "${BASH_SOURCE[0]:-0}")
 
 source "$WORKSPACE/_common.sh"
 
-QUTEBROWSER_SESSION="$HOME/.local/share/qutebrowser/sessions/_autosave.yml"
+session_dir="${QUTE_DATA_DIR:-${XDG_DATA_HOME:-$HOME/.local/share}/qutebrowser}/sessions"
+QUTEBROWSER_SESSION="$session_dir/_autosave.yml"
+if [[ -f "$session_dir/default.yml" && "$session_dir/default.yml" -nt "$QUTEBROWSER_SESSION" ]]; then
+    QUTEBROWSER_SESSION="$session_dir/default.yml"
+fi
+
+if [[ ! -f "$QUTEBROWSER_SESSION" ]]; then
+    update "no saved session found"
+    exit 1
+fi
 
 mapfile -t titles < <(yq -r '.windows[].tabs[].history[] | select(.active) | .title' "$QUTEBROWSER_SESSION")
 
@@ -16,14 +25,16 @@ fi
 if [[ ${#titles[@]} -eq 1 ]]; then
    selected_titles=("${titles[0]}")
 else
-    mapfile -t selected_titles < <(printf '%s\n' "${titles[@]}" | rofi -dmenu -multi-select -case-smart -sort -sorting-method fzf -p "")
+    picker="${XDG_CONFIG_HOME:-$HOME/.config}/quickshell/src/services/launcher/launcher.sh"
+    selection=$(printf '%s\n' "${titles[@]}" | "$picker" --dmenu -multi-select -no-custom -sort -p "Tabs") || exit "$?"
+    [[ -n "$selection" ]] || exit 0
+    mapfile -t selected_titles <<< "$selection"
 fi
 
 if (( ${#selected_titles[@]} )); then
     selected_json=$(printf '%s\n' "${selected_titles[@]}" | jq -R -s -c 'split("\n")[:-1]')
-    urls=($(yq -r --argjson t "$selected_json" '.windows[].tabs[].history[] | select(.active and (.title | IN($t[]))) | .url' "$QUTEBROWSER_SESSION"))
+    mapfile -t urls < <(yq -r --argjson t "$selected_json" '.windows[].tabs[].history[] | select(.active and (.title | IN($t[]))) | .url' "$QUTEBROWSER_SESSION")
     clean_urls=$(printf '%s\n' "${urls[@]}" | clean_all)
-    echo -n "$clean_urls" | wl-copy
+    printf '%s' "$clean_urls" | wl-copy || exit "$?"
+    update "selection copied"
 fi
-
-update "selection copied"
