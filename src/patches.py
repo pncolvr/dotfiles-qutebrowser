@@ -10,6 +10,7 @@ from qutebrowser.utils import resources
 
 
 def apply(palette):
+    _install_rbw()
     _install_caret_style_fix()
     _install_title_cleanup()
     _install_popup_fixes()
@@ -136,3 +137,10 @@ def _install_fullscreen_notice(accent):
             super().setStyleSheet(self._theme_stylesheet)
 
     miscwidgets.FullscreenNotification = _ThemedFullscreenNotification
+
+
+def _install_rbw():
+    from pathlib import Path
+    from runpy import run_path
+
+    run_path(str(Path(__file__).with_name("rbw.py")))["install"]()

@@ -51,6 +51,9 @@ def apply(config, paths):
     # config.bind('>mM', 'hint links userscript view_in_mpv --force-window=immediate')
     config.bind('>mM', 'hint links userscript to_mpv')
 
+    # Browser-owned credential operation; credentials never enter command arguments.
+    config.bind('>bw', 'rbw-fill')
+
     # Userscripts (custom reader wrappers keep output in temporary storage)
     config.bind('>qr', 'spawn --userscript qr')
     config.bind('>rr', 'spawn --userscript readability-js')
