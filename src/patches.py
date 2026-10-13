@@ -1,4 +1,4 @@
-"""Reload-safe customizations of qutebrowser widgets.
+"""Reload-safe customizations of qutebrowser widgets and scripts.
 
 These use qutebrowser internals; check them after browser upgrades.
 """
@@ -6,12 +6,24 @@ These use qutebrowser internals; check them after browser upgrades.
 from qutebrowser.mainwindow import mainwindow, prompt, tabwidget
 from qutebrowser.misc import miscwidgets
 from qutebrowser.qt import sip
+from qutebrowser.utils import resources
 
 
 def apply(palette):
+    _install_caret_style_fix()
     _install_title_cleanup()
     _install_popup_fixes()
     _install_fullscreen_notice(palette['ACCENT'])
+
+
+def _install_caret_style_fix():
+    # qutebrowser #7498: Trusted Types blocks innerHTML on sites like YouTube.
+    # The style element contains CSS, so insert it as text instead of HTML.
+    # Tabs capture this resource when created; restart to update existing tabs.
+    filename = 'javascript/caret.js'
+    resources._cache[filename] = resources.read_file(filename).replace(
+        'node.innerHTML = style;', 'node.textContent = style;',
+    )
 
 
 def _install_title_cleanup():

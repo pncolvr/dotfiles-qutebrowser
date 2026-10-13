@@ -95,23 +95,24 @@ def apply(c, paths):
     c.fonts.contextmenu = '10pt Noto Sans Mono'
     c.fonts.prompts = '10pt Noto Sans Mono'
 
-    # Status text uses the desktop foreground; modes retain semantic accents.
+    # Insert, passthrough, and caret use accent backgrounds with white text.
+    # Keep command entry on a black background.
     c.colors.statusbar.normal.bg = BACKGROUND
     c.colors.statusbar.normal.fg = TEXT
     c.colors.statusbar.command.bg = BACKGROUND
-    c.colors.statusbar.command.fg = TEXT
-    c.colors.statusbar.insert.bg = BACKGROUND
-    c.colors.statusbar.insert.fg = ACTIVE
-    c.colors.statusbar.passthrough.bg = BACKGROUND
-    c.colors.statusbar.passthrough.fg = WARNING
-    c.colors.statusbar.caret.bg = BACKGROUND
-    c.colors.statusbar.caret.fg = ACCENT
+    c.colors.statusbar.command.fg = '#ffffff'
+    c.colors.statusbar.insert.bg = ACTIVE
+    c.colors.statusbar.insert.fg = '#ffffff'
+    c.colors.statusbar.passthrough.bg = WARNING
+    c.colors.statusbar.passthrough.fg = '#ffffff'
+    c.colors.statusbar.caret.bg = ACCENT
+    c.colors.statusbar.caret.fg = '#ffffff'
     c.colors.statusbar.caret.selection.bg = ACCENT
-    c.colors.statusbar.caret.selection.fg = BACKGROUND
+    c.colors.statusbar.caret.selection.fg = '#ffffff'
     c.colors.statusbar.private.bg = SURFACE
     c.colors.statusbar.private.fg = TEXT
-    c.colors.statusbar.command.private.bg = SURFACE
-    c.colors.statusbar.command.private.fg = TEXT
+    c.colors.statusbar.command.private.bg = BACKGROUND
+    c.colors.statusbar.command.private.fg = '#ffffff'
     c.colors.statusbar.progress.bg = ACCENT
     c.colors.statusbar.url.fg = TEXT
     c.colors.statusbar.url.hover.fg = ACCENT

@@ -19,7 +19,8 @@ def apply(config, c, paths):
     # Return to the landing page when the last tab closes.
     c.tabs.last_close = 'default-page'
     c.input.insert_mode.auto_leave = True
-    c.input.insert_mode.auto_load = True
+    c.input.insert_mode.auto_enter = False
+    c.input.insert_mode.auto_load = False
     c.completion.open_categories = [
         'searchengines', 'quickmarks', 'bookmarks', 'history', 'filesystem',
     ]

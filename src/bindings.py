@@ -13,8 +13,8 @@ def apply(config, paths):
     config.bind('L', 'scroll right')
     config.bind('o', 'cmd-set-text -s :open')
     config.bind('!', 'cmd-set-text -s :open !')
-    config.bind('b', 'cmd-set-text -s :quickmark-load -t')
-    config.bind('B', 'cmd-set-text -s :quickmark-load')
+    # config.bind('b', 'cmd-set-text -s :quickmark-load -t')
+    # config.bind('B', 'cmd-set-text -s :quickmark-load')
     config.bind('<Ctrl-l>', 'cmd-set-text :open {url:pretty}')
     config.bind('<Ctrl-t>', 'cmd-set-text -s :open -t ')
     config.bind(',co', 'tab-only')
@@ -46,14 +46,17 @@ def apply(config, paths):
     config.bind(',yy', f'spawn --userscript {scripts_folder}/url/clean.sh {{url}}')
     config.bind(',yY', f'hint links spawn --userscript {scripts_folder}/url/clean.sh {{hint-url}}')
     config.bind(',YY', f'spawn --userscript {scripts_folder}/url/select.sh')
-    config.bind(',mm', 'spawn --userscript '
-                      '~/.config/quickshell/src/services/launcher/launcher.sh '
-                      'provider media "{title}" "{url}"')
+    # Packaged alternative, kept for a later retry:
+    # config.bind(',mm', 'spawn --userscript view_in_mpv --force-window=immediate')
+    config.bind(',mm', 'spawn --userscript to_mpv')
     config.bind(',MM', f'spawn /usr/bin/ghostty -e {scripts_folder}/hold.sh '
                       f'{scripts_folder}/download.sh {{url}}')
-    config.bind(',mM', 'hint links spawn --userscript '
-                      '~/.config/quickshell/src/services/launcher/launcher.sh '
-                      'provider media "{title}" "{hint-url}"')
+    # config.bind(',mM', 'hint links userscript view_in_mpv --force-window=immediate')
+    config.bind(',mM', 'hint links userscript to_mpv')
+
+    # Userscripts (custom reader wrappers keep output in temporary storage)
+    config.bind(',qr', 'spawn --userscript qr')
+    config.bind(',rr', 'spawn --userscript readability-js')
 
     # Page scripts
     config.bind(',mo', f'jseval -f {scripts_folder}/js/mono.js')
