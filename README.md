@@ -25,3 +25,12 @@ git submodule update --init --recursive
 ```shell
 git submodule sync --recursive
 ```
+
+# Custom userscripts
+
+Executable scripts, page JavaScript and site-specific Greasemonkey sources live
+in the separate repo at `~/.local/share/qutebrowser/userscripts`. Bindings call
+its scripts by name. Keep browser settings, theme and the global scrollbar
+stylesheet in this repo. Run `:config-source` after changing bindings.
+
+Use `,gr` to regenerate custom CSS/JavaScript and reload the page.

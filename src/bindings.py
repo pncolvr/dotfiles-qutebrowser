@@ -3,7 +3,6 @@
 
 def apply(config, paths):
     home = paths.home
-    scripts_folder = paths.scripts
     default_page = paths.default_page
 
     # Navigation, tabs, and sessions
@@ -39,18 +38,16 @@ def apply(config, paths):
                       f'{home}/Downloads {home}/Downloads/mods_download')
     config.bind(',ss', ':screenshot ~/Pictures/qutebrowser/{date}.png')
     config.bind(',sS', ':print --pdf ~/Pictures/qutebrowser/{date}.pdf')
-    config.bind(',cc', f'spawn /usr/bin/ghostty -e {scripts_folder}/hold.sh '
-                      f'{scripts_folder}/certificate.sh {{url}}')
+    config.bind(',cc', 'spawn --userscript certificate')
 
     # URLs and media
-    config.bind(',yy', f'spawn --userscript {scripts_folder}/url/clean.sh {{url}}')
-    config.bind(',yY', f'hint links spawn --userscript {scripts_folder}/url/clean.sh {{hint-url}}')
-    config.bind(',YY', f'spawn --userscript {scripts_folder}/url/select.sh')
+    config.bind(',yy', 'spawn --userscript clean_url')
+    config.bind(',yY', 'hint links userscript clean_url')
+    config.bind(',YY', 'spawn --userscript select_urls')
     # Packaged alternative, kept for a later retry:
     # config.bind(',mm', 'spawn --userscript view_in_mpv --force-window=immediate')
     config.bind(',mm', 'spawn --userscript to_mpv')
-    config.bind(',MM', f'spawn /usr/bin/ghostty -e {scripts_folder}/hold.sh '
-                      f'{scripts_folder}/download.sh {{url}}')
+    config.bind(',MM', 'spawn --userscript download')
     # config.bind(',mM', 'hint links userscript view_in_mpv --force-window=immediate')
     config.bind(',mM', 'hint links userscript to_mpv')
 
@@ -59,13 +56,11 @@ def apply(config, paths):
     config.bind(',rr', 'spawn --userscript readability-js')
 
     # Page scripts
-    config.bind(',mo', f'jseval -f {scripts_folder}/js/mono.js')
-    config.bind(',ui', f'jseval -f {scripts_folder}/js/unlockinsta.js')
-    config.bind(',gh', f'jseval -f {scripts_folder}/js/home.js')
-    config.bind('D', f'spawn --userscript {scripts_folder}/python/darkreader.py '
-                    'toggle domain')
-    config.bind(',gr', f'spawn --userscript {scripts_folder}/custom/apply.sh ;; '
-                      'greasemonkey-reload ;; reload')
+    config.bind(',mo', 'spawn --userscript mono')
+    config.bind(',ui', 'spawn --userscript unlockinsta')
+    config.bind(',gh', 'spawn --userscript home')
+    config.bind('D', 'spawn --userscript darkreader toggle domain')
+    config.bind(',gr', 'spawn --userscript apply_custom')
 
     # Browser controls
     config.bind('<F12>', 'devtools')
