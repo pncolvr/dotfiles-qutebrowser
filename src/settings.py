@@ -41,6 +41,7 @@ def apply(config, c, paths):
         'https://downloads.vivaldi.com/lists/abp/abp-filters-anti-cv-current.txt',
         'https://easylist-downloads.adblockplus.org/easylistportuguese.txt',
         'https://secure.fanboy.co.nz/fanboy-cookiemonster.txt',
+        'https://easylist.to/easylist/fanboy-annoyance.txt',
     ]
     c.content.mouse_lock = 'ask'
     c.content.pdfjs = False
