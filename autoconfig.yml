@@ -10,6 +10,8 @@ settings:
     global: 3000
   changelog_after_upgrade:
     global: patch
+  colors.webpage.darkmode.enabled:
+    '*://faturas.portaldasfinancas.gov.pt/*': false
   content.javascript.clipboard:
     https://quickshell.org: access-paste
   content.notifications.enabled:

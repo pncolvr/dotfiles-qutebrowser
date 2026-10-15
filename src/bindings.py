@@ -68,4 +68,6 @@ def apply(config, paths):
     # Browser controls
     config.bind('<F12>', 'devtools')
     config.bind('<Ctrl+b>', 'config-cycle statusbar.show never always')
+    config.bind('>dm', 'config-cycle -p -u *://{url:host}/* '
+                        'colors.webpage.darkmode.enabled ;; reload')
     config.bind('>cs', ':config-source')
