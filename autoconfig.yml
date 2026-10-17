@@ -12,6 +12,10 @@ settings:
     global: patch
   colors.webpage.darkmode.enabled:
     '*://faturas.portaldasfinancas.gov.pt/*': false
+    '*://medium.com/*': false
+    '*://www.flama-home.com/*': false
+    '*://www.twitch.tv/*': false
+    '*://www.youtube.com/*': false
   content.javascript.clipboard:
     https://quickshell.org: access-paste
   content.notifications.enabled:
