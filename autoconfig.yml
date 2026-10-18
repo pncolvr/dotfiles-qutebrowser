@@ -11,6 +11,7 @@ settings:
   changelog_after_upgrade:
     global: patch
   colors.webpage.darkmode.enabled:
+    '*://drive.google.com/*': false
     '*://faturas.portaldasfinancas.gov.pt/*': false
     '*://medium.com/*': false
     '*://www.flama-home.com/*': false
