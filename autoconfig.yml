@@ -5,27 +5,4 @@
 # Instead, create a config.py - see :help for details.
 
 config_version: 2
-settings:
-  auto_save.interval:
-    global: 3000
-  changelog_after_upgrade:
-    global: patch
-  colors.webpage.darkmode.enabled:
-    '*://drive.google.com/*': false
-    '*://faturas.portaldasfinancas.gov.pt/*': false
-    '*://medium.com/*': false
-    '*://www.flama-home.com/*': false
-    '*://www.twitch.tv/*': false
-    '*://www.youtube.com/*': false
-  content.javascript.clipboard:
-    https://quickshell.org: access-paste
-  content.notifications.enabled:
-    https://calendar.google.com: false
-  downloads.location.directory:
-    global: /home/pncolvr/Downloads/mods_download
-  downloads.location.prompt:
-    global: false
-  fonts.tabs.selected:
-    global: 9pt JetBrains Mono
-  statusbar.show:
-    global: always
+settings: {}
