@@ -55,6 +55,9 @@ def apply(config, c, paths):
     config.set('content.cookies.accept', 'all')
     config.set('content.cookies.store', True)
     config.set('content.local_storage', True)
+    config.set('content.notifications.enabled', False, 'https://calendar.google.com')
+    config.set('content.register_protocol_handler', False,
+               'https://calendar.google.com?cid=%25s')
 
     # Search and zoom
     c.zoom.levels = [f'{level}%' for level in range(25, 501, 5)]
