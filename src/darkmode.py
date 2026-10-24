@@ -20,6 +20,7 @@ def apply(config):
         '*://pncolvr.github.io/*',
         '*://studio.buymeacoffee.com/*',
         '*://www.flama-home.com/*',
+        '*://www.google.com/*',
         '*://www.portaldasfinancas.gov.pt/*',
         '*://www.twitch.tv/*',
         '*://www.youtube.com/*',
