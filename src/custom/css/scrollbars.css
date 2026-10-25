@@ -1,9 +1,49 @@
-/* The scrollbars.js userscript reveals only the area currently being scrolled. */
-* {
-    scrollbar-color: transparent transparent !important;
-    scrollbar-width: thin !important;
+/* Only hide native thumbs after scrollbars.js installs their replacements.
+ * The fixed gutter keeps content clear while the thumb grows. Unmanaged
+ * controls (including shadow roots) retain their native scrollbars. */
+[data-qute-scrollbar-managed] {
+    scrollbar-width: auto !important;
+    scrollbar-color: auto !important;
+    scroll-behavior: auto !important;
+    touch-action: pinch-zoom !important;
 }
 
-[data-qute-scrolling] {
-    scrollbar-color: #6b8fb3 transparent !important;
+[data-qute-scrollbar-managed]::-webkit-scrollbar {
+    width: 20px !important;
+    height: 20px !important;
+}
+
+[data-qute-scrollbar-managed]::-webkit-scrollbar-thumb,
+[data-qute-scrollbar-managed]::-webkit-scrollbar-track,
+[data-qute-scrollbar-managed]::-webkit-scrollbar-corner {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+[data-qute-scrollbar-managed]::-webkit-scrollbar-button {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+}
+
+/* The browser paints its viewport scrollbar outside the document's drawable
+ * area. Keep the page thumb inside that area and reserve its space as padding.
+ * Original page padding is captured before the controller enables these rules. */
+html[data-qute-scrollbar-root] {
+    scrollbar-width: none !important;
+    box-sizing: border-box !important;
+    padding-left: calc(var(--qute-scrollbar-padding-left, 0px) + var(--qute-scrollbar-gutter-left, 0px)) !important;
+    padding-right: calc(var(--qute-scrollbar-padding-right, 0px) + var(--qute-scrollbar-gutter-right, 0px)) !important;
+    padding-bottom: calc(var(--qute-scrollbar-padding-bottom, 0px) + var(--qute-scrollbar-gutter-bottom, 0px)) !important;
+}
+
+html[data-qute-scrollbar-root]::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+}
+
+@media print {
+    [data-qute-scrollbar-host] { display: none !important; }
 }

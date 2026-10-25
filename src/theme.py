@@ -34,8 +34,9 @@ def apply(c, paths):
     # Completion: quiet rows, clear section headers, and a subtle blue selection.
     c.completion.height = '35%'
     c.completion.shrink = True
-    c.completion.scrollbar.width = 6
-    c.completion.scrollbar.padding = 1
+    # Reserve a fixed strip for the animated thumb in src/scrollbars.py.
+    c.completion.scrollbar.width = 20
+    c.completion.scrollbar.padding = 0
     c.colors.completion.category.bg = BACKGROUND
     c.colors.completion.category.fg = ACCENT
     c.colors.completion.category.border.top = BACKGROUND
@@ -49,7 +50,7 @@ def apply(c, paths):
     c.colors.completion.item.selected.border.top = ACCENT
     c.colors.completion.item.selected.border.bottom = ACCENT
     c.colors.completion.item.selected.match.fg = ACCENT
-    c.colors.completion.scrollbar.bg = BACKGROUND
+    c.colors.completion.scrollbar.bg = 'transparent'
     c.colors.completion.scrollbar.fg = ACCENT
 
     # Downloads and navigation hints.
