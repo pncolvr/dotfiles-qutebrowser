@@ -1,4 +1,5 @@
-/* Only hide native thumbs after scrollbars.js installs their replacements.
+/* scrollbars.js marks only areas without site-provided scrollbar styling or
+ * components. Hide native thumbs only after installing their replacements.
  * The fixed gutter keeps content clear while the thumb grows. Unmanaged
  * controls (including shadow roots) retain their native scrollbars. */
 [data-qute-scrollbar-managed] {
