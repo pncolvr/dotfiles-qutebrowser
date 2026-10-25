@@ -59,7 +59,8 @@ def apply(config, c, paths):
     config.set('content.register_protocol_handler', False,
                'https://calendar.google.com?cid=%25s')
 
-    # Search and zoom
+    # Scrolling, search, and zoom
+    c.scrolling.smooth = True
     c.zoom.levels = [f'{level}%' for level in range(25, 501, 5)]
     c.zoom.mouse_divider = 8192
     c.url.searchengines = {

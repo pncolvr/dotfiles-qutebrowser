@@ -1,14 +1,15 @@
-"""Quickshell scrollbar geometry and input policy for qutebrowser's Qt UI.
+"""Quickshell-style completion thumbs; scrolling stays browser-controlled.
 
-Webpage thumbs live in the shared scrollbars.js userscript. Qt receives wheel
-phases before Chromium does, so momentum filtering belongs here as well.
+Webpage thumbs live in the shared scrollbars.js userscript.
 """
 
+import sys
+
 from qutebrowser.qt.core import (
-    QCoreApplication, QEvent, QObject, QPoint, QRectF, QSize, Qt, QTimer,
+    QEvent, QObject, QRectF, QSize, Qt, QTimer,
     QVariantAnimation, QEasingCurve,
 )
-from qutebrowser.qt.gui import QColor, QPainter, QWheelEvent
+from qutebrowser.qt.gui import QColor, QPainter
 from qutebrowser.qt.widgets import QApplication, QAbstractItemView, QScrollBar
 
 GUTTER = 20
@@ -221,74 +222,7 @@ class ViewHover(QObject):
         return False
 
 
-class WheelPolicy(QObject):
-    """Drop momentum and normalize mouse ticks before Chromium loses Qt phases."""
-
-    def __init__(self, parent):
-        super().__init__(parent)
-        self._forwarding = False
-
-    def eventFilter(self, obj, event):
-        if event.type() != QEvent.Type.Wheel or self._forwarding:
-            return False
-        # Restrict this policy to page views and our completion scrollbars.
-        widget = obj
-        while widget is not None:
-            if widget.property('quickshellScrollInput'):
-                break
-            widget = widget.parent()
-        if widget is None or event.modifiers() & Qt.KeyboardModifier.ControlModifier:
-            return False
-        if event.phase() == Qt.ScrollPhase.ScrollMomentum:
-            event.accept()
-            return True
-        if event.pixelDelta().isNull() and event.angleDelta().isNull():
-            return False
-        delta = event.angleDelta()
-        pixels = event.pixelDelta()
-        if pixels.isNull():
-            pixels = QPoint(round(delta.x() / 120 * 40), round(delta.y() / 120 * 40))
-        webengine = widget.inherits('QWebEngineView')
-        if isinstance(widget, QAbstractItemView):
-            horizontal, vertical = widget.horizontalScrollBar(), widget.verticalScrollBar()
-            dx, dy = pixels.x(), pixels.y()
-            can_horizontal = (horizontal.maximum() > horizontal.minimum() and
-                              widget.horizontalScrollBarPolicy() != Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-            if can_horizontal and (event.modifiers() & Qt.KeyboardModifier.ShiftModifier or
-                                   vertical.maximum() == vertical.minimum()):
-                dx, dy = dx or dy, 0
-            before = (horizontal.value(), vertical.value())
-            if can_horizontal:
-                direction = 1 if widget.layoutDirection() == Qt.LayoutDirection.RightToLeft else -1
-                horizontal.setValue(horizontal.value() + direction * dx)
-            vertical.setValue(vertical.value() - dy)
-            event.setAccepted(before != (horizontal.value(), vertical.value()))
-            return True
-        if not webengine and not event.pixelDelta().isNull():
-            return False
-        # QtWebEngine's WebEventFactory ignores pixelDelta and derives pixels
-        # from angleDelta using wheelScrollLines * 20px per 120 angle units.
-        # Preserve precise touchpad deltas through that conversion too.
-        angle = QPoint()
-        if webengine:
-            factor = 120 / (max(1, QApplication.wheelScrollLines()) * 20)
-            angle = QPoint(round(pixels.x() * factor), round(pixels.y() * factor))
-        forwarded = QWheelEvent(
-            event.position(), event.globalPosition(),
-            pixels, angle, event.buttons(), event.modifiers(), event.phase(), event.inverted(),
-            Qt.MouseEventSource.MouseEventSynthesizedByApplication, event.pointingDevice(),
-        )
-        self._forwarding = True
-        try:
-            QCoreApplication.sendEvent(obj, forwarded)
-        finally:
-            self._forwarding = False
-        event.setAccepted(forwarded.isAccepted())
-        return True
-
-
 def attach(view, accent):
-    _ensure_policy()
     if hasattr(view, '_quickshell_scrollbars'):
         for bar in view._quickshell_scrollbars:
             bar.accent = QColor(accent)
@@ -303,24 +237,27 @@ def attach(view, accent):
             view.setHorizontalScrollBar(bar)
         bars.append(bar)
     view.setVerticalScrollMode(QAbstractItemView.ScrollMode.ScrollPerPixel)
-    view.setProperty('quickshellScrollInput', True)
     view._quickshell_scrollbars = bars
     view._quickshell_scroll_hover = ViewHover(view, bars)
 
 
-def _ensure_policy():
-    app = QApplication.instance()
-    if app is not None and not hasattr(app, '_quickshell_wheel_policy'):
-        app._quickshell_wheel_policy = WheelPolicy(app)
-        app.installEventFilter(app._quickshell_wheel_policy)
-
-
 def install(accent):
     from qutebrowser.completion import completionwidget
-    from qutebrowser.browser.webengine import webview
 
     app = QApplication.instance()
-    _ensure_policy()
+    # Remove the previous input override when this config is reloaded in an
+    # already-running browser. Fresh starts do not install any input filter.
+    if app is not None and hasattr(app, '_quickshell_wheel_policy'):
+        policy = app._quickshell_wheel_policy
+        app.removeEventFilter(policy)
+        policy.deleteLater()
+        del app._quickshell_wheel_policy
+    webview = sys.modules.get('qutebrowser.browser.webengine.webview')
+    if webview is not None:
+        web_cls = webview.WebEngineView
+        if hasattr(web_cls, '_quickshell_original_init'):
+            web_cls.__init__ = web_cls._quickshell_original_init
+            del web_cls._quickshell_original_init
 
     cls = completionwidget.CompletionView
     original = getattr(cls, '_quickshell_original_init', cls.__init__)
@@ -335,16 +272,3 @@ def install(accent):
     for widget in app.allWidgets() if app is not None else ():
         if isinstance(widget, cls):
             attach(widget, accent)
-        elif isinstance(widget, webview.WebEngineView):
-            widget.setProperty('quickshellScrollInput', True)
-
-    web_cls = webview.WebEngineView
-    web_original = getattr(web_cls, '_quickshell_original_init', web_cls.__init__)
-    web_cls._quickshell_original_init = web_original
-
-    def web_init(self, *args, **kwargs):
-        web_original(self, *args, **kwargs)
-        _ensure_policy()
-        self.setProperty('quickshellScrollInput', True)
-
-    web_cls.__init__ = web_init

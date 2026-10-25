@@ -4,8 +4,6 @@
 [data-qute-scrollbar-managed] {
     scrollbar-width: auto !important;
     scrollbar-color: auto !important;
-    scroll-behavior: auto !important;
-    touch-action: pinch-zoom !important;
 }
 
 [data-qute-scrollbar-managed]::-webkit-scrollbar {
