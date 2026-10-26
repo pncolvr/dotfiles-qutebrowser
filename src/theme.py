@@ -13,10 +13,8 @@ ACTIVE = '#5c9e7e'
 WARNING = '#fd6d37'
 
 
-def apply(c, paths):
-    # Fonts, webpage background, and scrollbars.
-    c.scrolling.bar = 'overlay'
-    c.content.user_stylesheets = [paths.stylesheet]
+def apply(c):
+    # Fonts and webpage background.
     c.tabs.padding = {'top': 0, 'bottom': 0, 'left': 0, 'right': 0}
     c.colors.webpage.bg = '#1e1e1e'
     c.fonts.default_family = ['Noto Sans Mono']
@@ -34,9 +32,6 @@ def apply(c, paths):
     # Completion: quiet rows, clear section headers, and a subtle blue selection.
     c.completion.height = '35%'
     c.completion.shrink = True
-    # Reserve a fixed strip for the animated thumb in src/scrollbars.py.
-    c.completion.scrollbar.width = 20
-    c.completion.scrollbar.padding = 0
     c.colors.completion.category.bg = BACKGROUND
     c.colors.completion.category.fg = ACCENT
     c.colors.completion.category.border.top = BACKGROUND
@@ -50,8 +45,6 @@ def apply(c, paths):
     c.colors.completion.item.selected.border.top = ACCENT
     c.colors.completion.item.selected.border.bottom = ACCENT
     c.colors.completion.item.selected.match.fg = ACCENT
-    c.colors.completion.scrollbar.bg = 'transparent'
-    c.colors.completion.scrollbar.fg = ACCENT
 
     # Downloads and navigation hints.
     c.colors.downloads.bar.bg = BACKGROUND

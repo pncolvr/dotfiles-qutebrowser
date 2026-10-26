@@ -5,4 +5,7 @@
 # Instead, create a config.py - see :help for details.
 
 config_version: 2
-settings: {}
+settings:
+  colors.webpage.darkmode.enabled:
+    '*://whitescreen.im/*': false
+    '*://x.com/*': false
