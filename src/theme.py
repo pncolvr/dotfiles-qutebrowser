@@ -1,5 +1,9 @@
 """Custom qutebrowser UI theme matching Quickshell Theme.qml and Hyprland."""
 
+from pathlib import Path
+
+from qutebrowser.utils import standarddir
+
 BACKGROUND = '#000000'
 SURFACE = '#1b1a1a'
 TEXT = '#d8dadc'
@@ -11,6 +15,10 @@ URGENT = '#b80f0a'
 OK = '#3e8e5a'
 ACTIVE = '#5c9e7e'
 WARNING = '#fd6d37'
+PROFILE_BACKGROUNDS = {
+    'webapp': '#1b2a3a',
+    'hobby': '#30243d',
+}
 
 
 def apply(c):
@@ -90,9 +98,21 @@ def apply(c):
     c.fonts.contextmenu = '10pt Noto Sans Mono'
     c.fonts.prompts = '10pt Noto Sans Mono'
 
+    # --basedir profiles store their configuration in a config/ subdirectory.
+    profile_dir = Path(standarddir.config())
+    if profile_dir.name == 'config':
+        profile_dir = profile_dir.parent
+    profile = profile_dir.name.removeprefix('qutebrowser-')
+    if profile == 'qutebrowser':
+        profile = 'default'
+    c.statusbar.widgets = [
+        'keypress', 'search_match', 'url', 'scroll', 'history', 'tabs', 'progress',
+        f'text:{profile}',
+    ]
+
     # Insert, passthrough, and caret use accent backgrounds with white text.
     # Keep command entry on a black background.
-    c.colors.statusbar.normal.bg = BACKGROUND
+    c.colors.statusbar.normal.bg = PROFILE_BACKGROUNDS.get(profile, BACKGROUND)
     c.colors.statusbar.normal.fg = TEXT
     c.colors.statusbar.command.bg = BACKGROUND
     c.colors.statusbar.command.fg = '#ffffff'
