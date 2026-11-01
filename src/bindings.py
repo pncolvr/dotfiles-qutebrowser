@@ -2,6 +2,8 @@
 
 
 def apply(config, paths):
+    _register_config_source_notice()
+
     home = paths.home
     default_page = paths.default_page
 
@@ -70,4 +72,22 @@ def apply(config, paths):
     config.bind('<Ctrl+b>', 'config-cycle statusbar.show never always')
     config.bind('>dm', 'config-cycle -p -u *://{url:host}/* '
                         'colors.webpage.darkmode.enabled ;; reload')
-    config.bind('>cs', ':config-source')
+    config.bind('>cs', ':config-source-notice')
+
+
+def _register_config_source_notice():
+    from qutebrowser.api import cmdutils
+    from qutebrowser.config import configexc, configfiles
+    from qutebrowser.misc import objects
+    from qutebrowser.utils import message, standarddir
+
+    objects.commands.pop('config-source-notice', None)
+
+    @cmdutils.register(name='config-source-notice')
+    def config_source_notice():
+        """Reload the config and report success or failure."""
+        try:
+            configfiles.read_config_py(standarddir.config_py())
+        except configexc.ConfigFileErrors as error:
+            raise cmdutils.CommandError(str(error))
+        message.info('Configuration reloaded')
