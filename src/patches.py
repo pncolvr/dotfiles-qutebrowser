@@ -19,6 +19,7 @@ def apply(palette):
     _install_greasemonkey_message_filter()
     _install_message_presentation()
     _install_centered_overlays()
+    _install_download_view_overlay()
     _install_omnibar()
     _install_title_cleanup()
     _install_popup_fixes()
@@ -166,11 +167,76 @@ def _install_message_presentation():
     messageview.MessageView.clear_messages = clear_messages_with_exit
 
 
+def _install_download_view_overlay():
+    from qutebrowser.browser import downloadview
+    from qutebrowser.misc import objects
+
+    view_class = downloadview.DownloadView
+    if not hasattr(view_class, '_qute_original_init'):
+        view_class._qute_original_init = view_class.__init__
+
+    original_init = view_class._qute_original_init
+    if not hasattr(view_class, '_qute_original_show_event'):
+        view_class._qute_original_show_event = view_class.showEvent
+
+    original_show_event = view_class._qute_original_show_event
+
+    def initialize_download_view(self, *args, **kwargs):
+        original_init(self, *args, **kwargs)
+        self.setWordWrap(False)
+
+    def hide_empty_view(self, event):
+        original_show_event(self, event)
+        if self.model().rowCount() == 0:
+            self._qute_hidden_empty = True
+            self.hide()
+
+    view_class.__init__ = initialize_download_view
+    view_class.showEvent = hide_empty_view
+
+    main_window_class = mainwindow.MainWindow
+    if not hasattr(main_window_class, '_qute_original_add_widgets'):
+        main_window_class._qute_original_add_widgets = main_window_class._add_widgets
+
+    original_add_widgets = main_window_class._qute_original_add_widgets
+
+    def add_widgets_with_download_overlay(self):
+        original_add_widgets(self)
+        attach_download_view(self)
+
+    def attach_download_view(window):
+        view = window._downloadview
+        window._vbox.removeWidget(view)
+        if not getattr(window, '_qute_download_overlay_registered', False):
+            window._overlays.append((
+                view, window._download_model.rowsInserted, False, 0,
+            ))
+            update_geometry = lambda *args: window._update_overlay_geometry(
+                view, False, 0,
+            )
+            if getattr(window, '_qute_centered_overlay_signals_connected', False):
+                window._download_model.rowsInserted.connect(update_geometry)
+            window._download_model.rowsRemoved.connect(update_geometry)
+            window._download_model.dataChanged.connect(update_geometry)
+            window._qute_download_overlay_registered = True
+        window._update_overlay_geometry(view, False, 0)
+
+    main_window_class._add_widgets = add_widgets_with_download_overlay
+
+    app = getattr(objects, 'qapp', None)
+    if app is None:
+        return
+    for window in app.topLevelWidgets():
+        if isinstance(window, main_window_class):
+            attach_download_view(window)
+
+
 def _install_centered_overlays():
     from functools import partial
 
     from qutebrowser.completion import completionwidget
     from qutebrowser.config import config
+    from qutebrowser.browser import downloadview
     from qutebrowser.mainwindow import messageview
     from qutebrowser.misc import keyhintwidget, objects
 
@@ -183,7 +249,40 @@ def _install_centered_overlays():
     original_update = main_window_class._qute_original_update_overlay_geometry
 
     def center_overlays(self, widget, centered, padding):
-        if isinstance(widget, messageview.MessageView):
+        if isinstance(widget, downloadview.DownloadView):
+            model = widget.model()
+            if model.rowCount() == 0:
+                widget._qute_hidden_empty = True
+                widget.hide()
+                return
+            if getattr(widget, '_qute_hidden_empty', False):
+                widget._qute_hidden_empty = False
+                widget.show()
+            if not widget.isVisible():
+                return
+            available_width = max(1, self.width() - 24)
+            content_width = max(
+                (
+                    widget.sizeHintForIndex(model.index(row, 0)).width()
+                    for row in range(model.rowCount())
+                ),
+                default=420,
+            )
+            width = min(available_width, min(640, max(320, content_width)))
+            widget.setGeometry(self.width() - width - 12, 0, width, self.height())
+            widget.doItemsLayout()
+            bottom = self.height()
+            if config.val.statusbar.position == 'bottom' and self.status.isVisible():
+                bottom = min(bottom, self.status.geometry().top())
+            height = max(1, min(widget.sizeHint().height(), bottom))
+            widget.setGeometry(
+                self.width() - width - 12,
+                max(0, bottom - height),
+                width,
+                height,
+            )
+            widget.raise_()
+        elif isinstance(widget, messageview.MessageView):
             if not widget.isVisible():
                 return
             available_width = max(1, self.width() - 2 * padding)
