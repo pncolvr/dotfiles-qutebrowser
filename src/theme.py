@@ -6,6 +6,7 @@ from qutebrowser.utils import standarddir
 
 BACKGROUND = '#000000'
 SURFACE = '#1b1a1a'
+MESSAGE_BG = '#21222c'
 TEXT = '#d8dadc'
 INACTIVE = '#b0b3b8'
 MUTED = '#62666b'
@@ -15,6 +16,12 @@ URGENT = '#b80f0a'
 OK = '#3e8e5a'
 ACTIVE = '#5c9e7e'
 WARNING = '#fd6d37'
+FONT_FAMILY = 'Noto Sans Mono'
+FONT_SIZE = '10pt'
+FONT_REGULAR = f'{FONT_SIZE} {FONT_FAMILY}'
+FONT_BOLD = f'bold {FONT_REGULAR}'
+FONT_TAB_SELECTED = f'9pt {FONT_FAMILY}'
+FONT_TAB_UNSELECTED = f'bold 8pt {FONT_FAMILY}'
 PROFILE_BACKGROUNDS = {
     'webapp': '#1b2a3a',
     'hobby': '#30243d',
@@ -25,14 +32,14 @@ def apply(c):
     # Fonts and webpage background.
     c.tabs.padding = {'top': 0, 'bottom': 0, 'left': 0, 'right': 0}
     c.colors.webpage.bg = '#1e1e1e'
-    c.fonts.default_family = ['Noto Sans Mono']
-    c.fonts.default_size = '10pt'
-    c.fonts.web.family.fixed = 'JetBrains Mono'
-    c.fonts.web.family.sans_serif = 'JetBrains Mono'
-    c.fonts.web.family.serif = 'JetBrains Mono'
-    c.fonts.web.family.standard = 'JetBrains Mono'
-    c.fonts.tabs.selected = '9pt JetBrains Mono'
-    c.fonts.tabs.unselected = 'bold 8pt Noto Sans Mono'
+    c.fonts.default_family = [FONT_FAMILY]
+    c.fonts.default_size = FONT_SIZE
+    c.fonts.web.family.fixed = FONT_FAMILY
+    c.fonts.web.family.sans_serif = FONT_FAMILY
+    c.fonts.web.family.serif = FONT_FAMILY
+    c.fonts.web.family.standard = FONT_FAMILY
+    c.fonts.tabs.selected = FONT_TAB_SELECTED
+    c.fonts.tabs.unselected = FONT_TAB_UNSELECTED
     c.colors.webpage.darkmode.enabled = False
     c.colors.webpage.darkmode.policy.images = 'never'
     c.colors.webpage.preferred_color_scheme = 'dark'
@@ -73,15 +80,17 @@ def apply(c):
     c.colors.keyhint.suffix.fg = ACCENT
 
     # Messages, prompts, tooltips, and context menus.
-    c.colors.messages.error.bg = URGENT
-    c.colors.messages.error.fg = TEXT
-    c.colors.messages.error.border = URGENT
-    c.colors.messages.warning.bg = SURFACE
+    c.colors.messages.error.bg = MESSAGE_BG
+    c.colors.messages.error.fg = URGENT
+    c.colors.messages.error.border = BORDER
+    c.colors.messages.warning.bg = MESSAGE_BG
     c.colors.messages.warning.fg = WARNING
-    c.colors.messages.warning.border = WARNING
-    c.colors.messages.info.bg = SURFACE
+    c.colors.messages.warning.border = BORDER
+    c.colors.messages.info.bg = MESSAGE_BG
     c.colors.messages.info.fg = TEXT
     c.colors.messages.info.border = BORDER
+    for level in ('error', 'warning', 'info'):
+        setattr(c.fonts.messages, level, FONT_BOLD)
     c.colors.prompts.bg = SURFACE
     c.colors.prompts.fg = TEXT
     c.colors.prompts.border = '1px solid ' + BORDER
@@ -95,8 +104,8 @@ def apply(c):
     c.colors.contextmenu.disabled.fg = MUTED
     c.colors.contextmenu.selected.bg = ACCENT
     c.colors.contextmenu.selected.fg = TEXT
-    c.fonts.contextmenu = '10pt Noto Sans Mono'
-    c.fonts.prompts = '10pt Noto Sans Mono'
+    c.fonts.contextmenu = FONT_REGULAR
+    c.fonts.prompts = FONT_REGULAR
 
     # --basedir profiles store their configuration in a config/ subdirectory.
     profile_dir = Path(standarddir.config())

@@ -22,7 +22,7 @@ def apply(palette):
     _install_omnibar()
     _install_title_cleanup()
     _install_popup_fixes()
-    _install_fullscreen_notice(palette['ACCENT'])
+    _install_fullscreen_notice(palette['ACCENT'], palette['FONT_FAMILY'])
 
 
 def _install_caret_style_fix():
@@ -67,7 +67,7 @@ def _install_greasemonkey_message_filter():
 
 def _install_message_presentation():
     from qutebrowser.mainwindow import messageview
-    from qutebrowser.qt.core import Qt
+    from qutebrowser.qt.core import QEasingCurve, QPoint, QPropertyAnimation, Qt
 
     if not hasattr(messageview.Message, '_qute_original_init'):
         messageview.Message._qute_original_init = messageview.Message.__init__
@@ -75,15 +75,25 @@ def _install_message_presentation():
         messageview.MessageView._qute_original_show_message = (
             messageview.MessageView.show_message
         )
+    if not hasattr(messageview.MessageView, '_qute_original_clear_messages'):
+        messageview.MessageView._qute_original_clear_messages = (
+            messageview.MessageView.clear_messages
+        )
 
     original_init = messageview.Message._qute_original_init
     original_show_message = messageview.MessageView._qute_original_show_message
+    original_clear_messages = messageview.MessageView._qute_original_clear_messages
 
     def initialize_centered_message(self, *args, **kwargs):
         original_init(self, *args, **kwargs)
         self.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
     def show_newest_message_first(self, info):
+        if getattr(self, '_qute_message_exit_pending', False):
+            self._qute_message_exit_animation.stop()
+            self._qute_message_exit_pending = False
+            self.move(self._qute_message_exit_target)
+
         previous_count = len(self._messages)
         original_show_message(self, info)
         if len(self._messages) > previous_count:
@@ -101,8 +111,59 @@ def _install_message_presentation():
                 if completion is not None and completion.isVisible():
                     completion.raise_()
 
+            animation = getattr(self, '_qute_message_entry_animation', None)
+            if animation is None:
+                animation = QPropertyAnimation(self, b'pos', self)
+                self._qute_message_entry_animation = animation
+            animation.stop()
+            target = self.pos()
+            curve = QEasingCurve(QEasingCurve.Type.OutBack)
+            curve.setOvershoot(0.8)
+            animation.setDuration(320)
+            animation.setEasingCurve(curve)
+            animation.setStartValue(target + QPoint(0, -18))
+            animation.setEndValue(target)
+            animation.start()
+
+    def clear_messages_with_exit(self):
+        if not self._messages or not self.isVisible():
+            original_clear_messages(self)
+            return
+        if getattr(self, '_qute_message_exit_pending', False):
+            return
+
+        self._clear_timer.stop()
+        entry_animation = getattr(self, '_qute_message_entry_animation', None)
+        if entry_animation is not None:
+            entry_animation.stop()
+        target = self.pos()
+        self._qute_message_exit_target = target
+        self._qute_message_exit_pending = True
+
+        animation = getattr(self, '_qute_message_exit_animation', None)
+        if animation is None:
+            animation = QPropertyAnimation(self, b'pos', self)
+            self._qute_message_exit_animation = animation
+
+            def finish_exit():
+                if not self._qute_message_exit_pending:
+                    return
+                self._qute_message_exit_pending = False
+                self.move(self._qute_message_exit_target)
+                original_clear_messages(self)
+
+            animation.finished.connect(finish_exit)
+
+        curve = QEasingCurve(QEasingCurve.Type.InCubic)
+        animation.setDuration(220)
+        animation.setEasingCurve(curve)
+        animation.setStartValue(target)
+        animation.setEndValue(target + QPoint(0, -18))
+        animation.start()
+
     messageview.Message.__init__ = initialize_centered_message
     messageview.MessageView.show_message = show_newest_message_first
+    messageview.MessageView.clear_messages = clear_messages_with_exit
 
 
 def _install_centered_overlays():
@@ -111,6 +172,7 @@ def _install_centered_overlays():
     from qutebrowser.completion import completionwidget
     from qutebrowser.config import config
     from qutebrowser.mainwindow import messageview
+    from qutebrowser.qt.gui import QPainterPath, QRegion
     from qutebrowser.misc import keyhintwidget, objects
 
     main_window_class = mainwindow.MainWindow
@@ -130,7 +192,7 @@ def _install_centered_overlays():
                 (message.sizeHint().width() for message in widget._messages),
                 default=160,
             )
-            width = min(available_width, min(560, max(160, content_width + 24)))
+            width = min(available_width, min(560, max(420, content_width + 24)))
             height = (
                 widget.heightForWidth(width)
                 if widget.hasHeightForWidth()
@@ -138,11 +200,21 @@ def _install_centered_overlays():
             )
             height = max(1, min(height, self.height() - 2 * padding))
             widget.setGeometry(
-                self.width() - width - padding,
+                (self.width() - width) // 2,
                 padding,
                 width,
                 height,
             )
+            radius = min(10, width / 2, height / 2)
+            path = QPainterPath()
+            path.moveTo(0, 0)
+            path.lineTo(width, 0)
+            path.lineTo(width, height - radius)
+            path.quadTo(width, height, width - radius, height)
+            path.lineTo(radius, height)
+            path.quadTo(0, height, 0, height - radius)
+            path.closeSubpath()
+            widget.setMask(QRegion(path.toFillPolygon().toPolygon()))
         elif isinstance(widget, keyhintwidget.KeyHintView):
             if not widget.isVisible():
                 return
@@ -439,7 +511,7 @@ def _install_popup_fixes():
     prompt.PromptContainer._on_show_prompts = _show_clean_prompt
 
 
-def _install_fullscreen_notice(accent):
+def _install_fullscreen_notice(accent, font_family):
     _fullscreen_base = getattr(
         miscwidgets.FullscreenNotification,
         '_qute_original_class',
@@ -454,7 +526,7 @@ def _install_fullscreen_notice(accent):
             border: none;
             border-radius: 16px;
             padding: 14px;
-            font-family: "Noto Sans Mono";
+            font-family: "{font_family}";
             font-size: 12px;
             font-weight: bold;
         """
