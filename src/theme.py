@@ -6,7 +6,7 @@ from qutebrowser.utils import standarddir
 
 BACKGROUND = '#000000'
 SURFACE = '#1b1a1a'
-MESSAGE_BG = '#21222c'
+MESSAGE_BG = BACKGROUND
 TEXT = '#d8dadc'
 INACTIVE = '#b0b3b8'
 MUTED = '#62666b'

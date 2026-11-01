@@ -172,7 +172,6 @@ def _install_centered_overlays():
     from qutebrowser.completion import completionwidget
     from qutebrowser.config import config
     from qutebrowser.mainwindow import messageview
-    from qutebrowser.qt.gui import QPainterPath, QRegion
     from qutebrowser.misc import keyhintwidget, objects
 
     main_window_class = mainwindow.MainWindow
@@ -205,16 +204,6 @@ def _install_centered_overlays():
                 width,
                 height,
             )
-            radius = min(10, width / 2, height / 2)
-            path = QPainterPath()
-            path.moveTo(0, 0)
-            path.lineTo(width, 0)
-            path.lineTo(width, height - radius)
-            path.quadTo(width, height, width - radius, height)
-            path.lineTo(radius, height)
-            path.quadTo(0, height, 0, height - radius)
-            path.closeSubpath()
-            widget.setMask(QRegion(path.toFillPolygon().toPolygon()))
         elif isinstance(widget, keyhintwidget.KeyHintView):
             if not widget.isVisible():
                 return
