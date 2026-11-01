@@ -3,15 +3,20 @@
 These use qutebrowser internals; check them after browser upgrades.
 """
 
+import re
+
 from qutebrowser.mainwindow import mainwindow, prompt, tabwidget
 from qutebrowser.misc import miscwidgets
 from qutebrowser.qt import sip
 from qutebrowser.utils import resources
 
+GREASEMONKEY_HIDDEN_SCRIPT_NAME_PATTERNS = (r"dark reader",)
+
 
 def apply(palette):
     _install_rbw()
     _install_caret_style_fix()
+    _install_greasemonkey_message_filter()
     _install_title_cleanup()
     _install_popup_fixes()
     _install_fullscreen_notice(palette['ACCENT'])
@@ -25,6 +30,36 @@ def _install_caret_style_fix():
     resources._cache[filename] = resources.read_file(filename).replace(
         'node.innerHTML = style;', 'node.textContent = style;',
     )
+
+
+def _install_greasemonkey_message_filter():
+    from qutebrowser.browser import greasemonkey
+
+    if not hasattr(greasemonkey.LoadResults, '_qute_original_successful_str'):
+        greasemonkey.LoadResults._qute_original_successful_str = (
+            greasemonkey.LoadResults.successful_str
+        )
+
+    original = greasemonkey.LoadResults._qute_original_successful_str
+    patterns = tuple(
+        re.compile(pattern, re.IGNORECASE)
+        for pattern in GREASEMONKEY_HIDDEN_SCRIPT_NAME_PATTERNS
+    )
+
+    def format_visible_scripts(self):
+        visible = [
+            script for script in self.successful
+            if not any(pattern.search(str(script)) for pattern in patterns)
+        ]
+        if len(visible) == len(self.successful):
+            return original(self)
+        if not visible:
+            return 'No visible Greasemonkey scripts loaded'
+
+        names = '\n'.join(str(script) for script in sorted(visible, key=str))
+        return f'Loaded Greasemonkey scripts:\n\n{names}'
+
+    greasemonkey.LoadResults.successful_str = format_visible_scripts
 
 
 def _install_title_cleanup():
