@@ -6,7 +6,9 @@ from qutebrowser.utils import standarddir
 
 BACKGROUND = '#000000'
 SURFACE = '#1b1a1a'
-MESSAGE_BG = BACKGROUND
+MESSAGE_INFO_BG = '#34516c'
+NOTIFICATION_CRITICAL = '#d32f2f'
+WHITE = '#ffffff'
 TEXT = '#d8dadc'
 INACTIVE = '#b0b3b8'
 MUTED = '#62666b'
@@ -80,15 +82,15 @@ def apply(c):
     c.colors.keyhint.suffix.fg = ACCENT
 
     # Messages, prompts, tooltips, and context menus.
-    c.colors.messages.error.bg = MESSAGE_BG
-    c.colors.messages.error.fg = URGENT
-    c.colors.messages.error.border = BORDER
-    c.colors.messages.warning.bg = MESSAGE_BG
-    c.colors.messages.warning.fg = WARNING
-    c.colors.messages.warning.border = BORDER
-    c.colors.messages.info.bg = MESSAGE_BG
-    c.colors.messages.info.fg = TEXT
-    c.colors.messages.info.border = BORDER
+    c.colors.messages.error.bg = NOTIFICATION_CRITICAL
+    c.colors.messages.error.fg = WHITE
+    c.colors.messages.error.border = NOTIFICATION_CRITICAL
+    c.colors.messages.warning.bg = MUTED
+    c.colors.messages.warning.fg = WHITE
+    c.colors.messages.warning.border = INACTIVE
+    c.colors.messages.info.bg = MESSAGE_INFO_BG
+    c.colors.messages.info.fg = WHITE
+    c.colors.messages.info.border = ACCENT
     for level in ('error', 'warning', 'info'):
         setattr(c.fonts.messages, level, FONT_BOLD)
     c.colors.prompts.bg = SURFACE
