@@ -15,6 +15,10 @@ MUTED = '#62666b'
 BORDER = '#2a2d38'
 ACCENT = '#6b8fb3'
 URGENT = '#b80f0a'
+# Fills behind TEXT (Quickshell accentFill/urgentFill): ACCENT and URGENT stay for
+# foregrounds and outlines; TEXT on ACCENT is only 2.41:1.
+ACCENT_FILL = '#2a4c6d'
+URGENT_FILL = '#9d0000'
 OK = '#3e8e5a'
 ACTIVE = '#5c9e7e'
 WARNING = '#fd6d37'
@@ -69,7 +73,7 @@ def apply(c):
     c.colors.downloads.start.fg = ACCENT
     c.colors.downloads.stop.bg = BACKGROUND
     c.colors.downloads.stop.fg = ACTIVE
-    c.colors.downloads.error.bg = URGENT
+    c.colors.downloads.error.bg = URGENT_FILL
     c.colors.downloads.error.fg = TEXT
     c.colors.downloads.system.bg = 'none'
     c.colors.downloads.system.fg = 'none'
@@ -96,7 +100,7 @@ def apply(c):
     c.colors.prompts.bg = SURFACE
     c.colors.prompts.fg = TEXT
     c.colors.prompts.border = '1px solid ' + BORDER
-    c.colors.prompts.selected.bg = ACCENT
+    c.colors.prompts.selected.bg = ACCENT_FILL
     c.colors.prompts.selected.fg = TEXT
     c.colors.tooltip.bg = BACKGROUND
     c.colors.tooltip.fg = TEXT
@@ -104,7 +108,7 @@ def apply(c):
     c.colors.contextmenu.menu.fg = TEXT
     c.colors.contextmenu.disabled.bg = SURFACE
     c.colors.contextmenu.disabled.fg = MUTED
-    c.colors.contextmenu.selected.bg = ACCENT
+    c.colors.contextmenu.selected.bg = ACCENT_FILL
     c.colors.contextmenu.selected.fg = TEXT
     c.fonts.contextmenu = FONT_REGULAR
     c.fonts.prompts = FONT_REGULAR
@@ -121,7 +125,8 @@ def apply(c):
         f'text:{profile}',
     ]
 
-    # Insert, passthrough, and caret use accent backgrounds with white text.
+    # Insert and passthrough use status backgrounds with white text; caret uses
+    # the accent fill with the theme text.
     # Keep command entry on a black background.
     c.colors.statusbar.normal.bg = PROFILE_BACKGROUNDS.get(profile, BACKGROUND)
     c.colors.statusbar.normal.fg = TEXT
@@ -131,10 +136,10 @@ def apply(c):
     c.colors.statusbar.insert.fg = '#ffffff'
     c.colors.statusbar.passthrough.bg = WARNING
     c.colors.statusbar.passthrough.fg = '#ffffff'
-    c.colors.statusbar.caret.bg = ACCENT
-    c.colors.statusbar.caret.fg = '#ffffff'
-    c.colors.statusbar.caret.selection.bg = ACCENT
-    c.colors.statusbar.caret.selection.fg = '#ffffff'
+    c.colors.statusbar.caret.bg = ACCENT_FILL
+    c.colors.statusbar.caret.fg = TEXT
+    c.colors.statusbar.caret.selection.bg = ACCENT_FILL
+    c.colors.statusbar.caret.selection.fg = TEXT
     c.colors.statusbar.private.bg = SURFACE
     c.colors.statusbar.private.fg = TEXT
     c.colors.statusbar.command.private.bg = BACKGROUND
