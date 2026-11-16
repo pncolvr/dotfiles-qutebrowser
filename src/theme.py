@@ -37,7 +37,6 @@ PROFILE_BACKGROUNDS = {
 def apply(c):
     # Fonts and webpage background.
     c.tabs.padding = {'top': 0, 'bottom': 0, 'left': 0, 'right': 0}
-    c.colors.webpage.bg = '#1e1e1e'
     c.fonts.default_family = [FONT_FAMILY]
     c.fonts.default_size = FONT_SIZE
     c.fonts.web.family.fixed = FONT_FAMILY
@@ -48,7 +47,7 @@ def apply(c):
     c.fonts.tabs.unselected = FONT_TAB_UNSELECTED
     c.colors.webpage.darkmode.enabled = False
     c.colors.webpage.darkmode.policy.images = 'never'
-    c.colors.webpage.preferred_color_scheme = 'dark'
+    c.colors.webpage.preferred_color_scheme = 'auto'
 
     # Completion: quiet rows, clear section headers, and a subtle blue selection.
     c.completion.height = '35%'
