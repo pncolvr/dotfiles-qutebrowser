@@ -46,6 +46,7 @@ def apply(config, c, paths):
     c.content.mouse_lock = 'ask'
     c.content.pdfjs = False
     c.content.autoplay = False
+    config.set('content.autoplay', True, '*://*.twitch.tv/*')
     c.content.blocking.enabled = True
     config.set('content.blocking.enabled', False, 'https://www.youtube.com/*')
     c.content.local_content_can_access_file_urls = True
