@@ -65,7 +65,7 @@ def apply(config, c, paths):
     c.zoom.levels = [f'{level}%' for level in range(25, 501, 5)]
     c.zoom.mouse_divider = 8192
     c.url.searchengines = {
-        'DEFAULT': 'https://start.duckduckgo.com/?q={}',
+        'DEFAULT': 'http://localhost:8087/search?q={}',
         '!da': 'https://duckduckgo.com/?q={}',
         '!pc': 'https://www.pcdiga.com/search?query={}',
         '!pdb': 'https://www.protondb.com/search?q={}',
